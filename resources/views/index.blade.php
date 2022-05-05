@@ -27,7 +27,8 @@
             </div>
             <div class="col-6">
                 <div class="d-flex justify-content-center">
-                    <a href="/clients/showall" class="btn btn-primary btn-lg">Я менеджер!</a>
+                    {{-- <a href="/manager" class="btn btn-primary btn-lg">Я менеджер!</a> --}}
+                    <a href="{{ route('manager') }}" class="btn btn-primary btn-lg">Я менеджер!</a>
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        return view('clients.index');
+        // return view('clients.index');
     }
 
     /**
@@ -38,9 +38,6 @@ class ClientsController extends Controller
     {
         $request->validated();
 
-        // dd($request);
-
-
         $client = Client::create([
             'secondname' => ucfirst($request->input('secondname')),
             'firstname' => ucfirst($request->input('firstname')),
@@ -50,7 +47,7 @@ class ClientsController extends Controller
         ]);
 
         
-        return redirect('/clients')->withInput();
+        return redirect('/')->withInput();
     }
 
     /**

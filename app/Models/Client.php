@@ -17,6 +17,4 @@ class Client extends Model
 
     public $timestamps =  true;
 
-
-
 }
