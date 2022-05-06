@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ManagerValidationRequest;
 use App\Models\Manager;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +13,13 @@ class ManagersController extends Controller
 {
     public function index()
     {
+        $clients = Client::paginate(20);
+        // dd($clients->links());
+        // dd($clients);
         // dd(Auth::guard('manager')->user());
-        return view('manager.index');
+        return view('manager.index', [
+            'clients' => $clients
+        ]);
     }
 
     public function registration()

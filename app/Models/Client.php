@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \DateTimeInterface;
 
 class Client extends Model
 {
@@ -17,4 +18,9 @@ class Client extends Model
 
     public $timestamps =  true;
 
+    
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('d-m-Y h:m:s');
+    }
 }
