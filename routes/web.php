@@ -24,6 +24,7 @@ Route::resource('/clients', ClientsController::class);
 Route::middleware('auth:manager')->prefix('/manager')->group(function(){
     Route::get('', [ManagersController::class, 'index'])->name('manager');
     Route::get('/report', [ManagersController::class, 'getReport'])->name('report');
+    Route::get('/client/{id}', [ManagersController::class, 'getClient']);
 });
 Route::prefix('/manager')->group(function(){
     Route::get('/registration', [ManagersController::class, 'registration'])->name('registration');

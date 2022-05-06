@@ -35,7 +35,7 @@ return [
     'current_password' => 'The password is incorrect.',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
-    'date_format' => 'The :attribute does not match the format :format.',
+    'date_format' => 'Поле :attribute не соответсвует формату :format.',
     'declined' => 'The :attribute must be declined.',
     'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => 'The :attribute and :other must be different.',
@@ -62,7 +62,7 @@ return [
         'array' => 'The :attribute must have :value items or more.',
     ],
     'image' => 'The :attribute must be an image.',
-    'in' => 'The selected :attribute is invalid.',
+    'in' => 'Выбранный параметр :attribute не подходит. Хватит баловаться, лучше работай!',
     'in_array' => 'The :attribute field does not exist in :other.',
     'integer' => 'The :attribute must be an integer.',
     'ip' => 'The :attribute must be a valid IP address.',
@@ -163,7 +163,9 @@ return [
         'patronymic' => 'отчество',
         'phone' => 'телефон',
         'name' => 'пользователь',
-        'password' => 'пароль'
+        'password' => 'пароль',
+        'date-start' => '"C"',
+        'date-end' => '"По"'
     ],
 
 ];

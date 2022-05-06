@@ -1,15 +1,18 @@
 $.when($.ready).then(function() {
-    // let row_count = $('.table-row').length;
-
-    // for (let i = 0; i < row_count; i++) {
-    //     $('#' + row_count).on('click', function() {
-    //         window.location()
-    //     });
-    // }
+    // $('.btn-filter').on('click', function() {
+    //     let btn_id = $(this).attr('id');
+    //     if (btn_id == 'created_at' || btn_id == 'updated_at') {
+    //         location = '/manager?page=' + current_page + '&sortby=' + $(this).attr('id');
+    //     }
+    // });
+    $('.btn-check, .date').on('change', function(){
+        $('#filter').trigger('submit');
+    });
 
     $('.table-row').on('click', function() {
-        alert($(this).attr('id'));
         location = '/manager/client/' + $(this).attr('id');
     });
     
 });
+
+// alert(location.href);

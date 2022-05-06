@@ -19,8 +19,25 @@ class Client extends Model
     public $timestamps =  true;
 
     
-    protected function serializeDate(DateTimeInterface $date)
+    // protected function serializeDate(DateTimeInterface $date)
+    // {
+    //     return $date->format('d-m-Y h:m:s');
+    // }
+    
+    // Get clients between dates and sort asc or desc by created_at or updated_at
+    static function getClientsByDate($sortby = null, $sortmethod = null, $date_start = null, $date_end = null)
     {
-        return $date->format('d-m-Y h:m:s');
+        if($sortby != null && $sortmethod != null && $date_start != null && $date_end != null) {
+            $date_start = $date_start.' 00:00:00';
+            $date_end = $date_end.' 23:59:59';
+
+            return Client::orderBy($sortby, $sortmethod)
+                ->where($sortby, '>=', $date_start)
+                ->where($sortby, '<=', $date_end)
+                ->paginate(15);
+        }else{
+            return Client::orderBy('created_at', 'desc')
+                ->paginate(15);
+        }
     }
 }
