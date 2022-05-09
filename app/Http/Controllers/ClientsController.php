@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientValidationRequest;
+use App\Models\City;
 use App\Models\Client;
 use Illuminate\Http\Request;
 
@@ -37,11 +38,21 @@ class ClientsController extends Controller
     public function store(ClientValidationRequest $request)
     {
         $request->validated();
+        $request->validate([
+            'email' => 'unique:clients',
+            'phone' => 'unique:clients'
+        ]);
 
-        $client = Client::create([
+        $city = City::firstOrCreate([
+            'name' => ucfirst($request->input('city'))
+        ]);
+
+        Client::create([
             'secondname' => ucfirst($request->input('secondname')),
             'firstname' => ucfirst($request->input('firstname')),
             'patronymic' => ucfirst($request->input('patronymic')),
+            'city_id' => $city->id,
+            'address' => $request->input('address'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone')
         ]);

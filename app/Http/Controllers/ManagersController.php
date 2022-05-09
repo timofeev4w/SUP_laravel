@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ManagerValidationRequest;
+use App\Http\Requests\ClientValidationRequest;
 use App\Models\Manager;
 use App\Models\Client;
+use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -26,30 +28,10 @@ class ManagersController extends Controller
             'date-start' => 'nullable|date_format:Y-m-d',
             'date-end' => 'nullable|date_format:Y-m-d',
         ]);
-        // dd($request->get('sortby'));
-        // if(isset($request->get('sortby')) && isset($request->get('sort'))) {
-        //     $clients = Client::orderBy($request->get('sortby'), $request->get('sort'))
-        //     ->paginate(15);
-        // }
-        // $date_start = $request->get('date-start').' 00:00:00';
-        // $date_end = $request->get('date-end').' 23:59:59';
 
+        $clients = Client::getClientsByDate($request->get('sortby'), $request->get('sortmethod'), $request->get('date-start'), $request->get('date-end'), $request->get('city'));
 
-        // if($request->get('sortby') != null && $request->get('sortmethod') != null && $request->get('date-start') != null && $request->get('date-end') != null) {
-        //     $date_start = $request->get('date-start').' 00:00:00';
-        //     $date_end = $request->get('date-end').' 23:59:59';
-
-        //     $clients = Client::orderBy($request->get('sortby'), $request->get('sortmethod'))
-        //         ->where($request->get('sortby'), '>=', $date_start)
-        //         ->where($request->get('sortby'), '<=', $date_end)
-        //         ->paginate(15);
-        // }else{
-        //     $clients = Client::orderBy('created_at', 'desc')
-        //         ->paginate(15);
-        // }
-
-        $clients = Client::getClientsByDate($request->get('sortby'), $request->get('sortmethod'), $request->get('date-start'), $request->get('date-end'));
-        // dd($clients);
+        $cities = City::all('name');
 
         $date_start = strtotime(Client::min('created_at'));
         $date_start = date('Y-m-d', $date_start);
@@ -57,27 +39,66 @@ class ManagersController extends Controller
         $date_end = strtotime(Client::max('updated_at'));
         $date_end = date('Y-m-d', $date_end);
 
-        // dd($date_start);
-        
-        // $clients = $clients->sortByDesc();
-        // $clients->values()->all();
-        // dd($clients->links());
-        // dd($clients);
-        // dd(Auth::guard('manager')->user());
         return view('manager.index', [
             'clients' => $clients,
+            'cities' => $cities,
             'date_start' => $date_start,
             'date_end' => $date_end,
         ]);
     }
 
-    public function getClient(int $id = 1)
+    public function getClient(int $id)
     {
         $client = Client::where('id', $id)
-            ->get();
-        dd($client);
+            ->first();
 
-        return view('manager.client');
+        return view('manager.client', [
+            'client' => $client
+        ]);
+    }
+
+    // Show page for input changes
+    public function edit(int $id)
+    {
+        $client = Client::where('id', $id)
+            ->first();
+
+            // dd($client);
+
+        return view('manager.client_edit', [
+            'client' => $client
+        ]);
+    }
+
+    // Update city and client
+    public function update(ClientValidationRequest $request, $id)
+    {
+        $request->validated();
+
+        $city = City::firstOrCreate([
+            'name' => $request->input('city')
+        ]);
+
+        Client::where('id', $id)
+            ->update([
+                'secondname' => ucfirst($request->input('secondname')),
+                'firstname' => ucfirst($request->input('firstname')),
+                'patronymic' => ucfirst($request->input('patronymic')),
+                'city_id' => $city->id,
+                'address' => $request->input('address'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone')
+            ]);
+
+        return redirect('/manager/client/'.$id);
+    }
+
+    public function destroy(int $id)
+    {
+        $client = Client::find($id);
+        $client->delete();
+
+        return redirect(route('manager'));
     }
 
     public function registration()

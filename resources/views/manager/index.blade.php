@@ -33,6 +33,19 @@
 
             <div class="d-flex justify-content-center">
                 <form action="" id="filter">
+                    <div class="row">
+                        <div class="d-flex justify-content-center p-3">
+                            <input class="form-control" list="datalistOptions" id="city" name="city" placeholder="Выберите город..." value="{{ (empty($_GET['city']) ? '' : $_GET['city']) }}">
+                            <datalist id="datalistOptions">
+                                @forelse ($cities as $city)
+                                    <option value="{{ $city->name }}">
+                                @empty
+                                    
+                                @endforelse
+                            </datalist>
+                        </div>
+                    </div>
+
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="btn-check" name="sortby" id="created_at" autocomplete="off" value="created_at" {{ empty($_GET['sortby']) ? 'checked' : ($_GET['sortby'] == 'created_at' ? 'checked' : '') }}>
                         <label class="btn btn-outline-primary" for="created_at">дате заявки</label>
@@ -61,32 +74,13 @@
                             min="{{ $date_start }}" max="{{ $date_end }}">
                     </div>
 
-                    {{-- <button type="submit">go</button> --}}
+                    <div class="row">
+                        <div class="d-flex justify-content-center p-3">
+                            <a href="/manager" class="btn btn-warning btn-sm">Сброс</a>
+                        </div>
+                    </div>
                 </form>
                 
-
-                {{-- <form action="{{ route('manager') }}?page={{ $clients->currentPage() }}&" method="get">
-                    <div class="btn-group pe-3" role="group" aria-label="Basic outlined example">
-                        <button type="button" id="created_at" class="bbtn-filter tn btn-outline-primary {{ empty($_GET['sortby']) ? 'active' : ($_GET['sortby'] == 'created_at' ? 'active' : '') }}">дате заявки</button>
-                        <button type="button" id="updated_at" class="btn-filter btn btn-outline-primary {{ empty($_GET['sortby']) ? '' : ($_GET['sortby'] == 'updated_at' ? 'active' : '') }}">дате редактирования</button>
-                    </div>
-                </form> --}}
-                
-
-                {{-- <div class="btn-group ps-3" role="group" aria-label="Basic outlined example">
-                    <button type="button" id="desc" class="btn-filter btn btn-outline-primary {{ empty($_GET['sortmethod']) ? 'active' : ($_GET['sortmethod'] == 'desc' ? 'active' : '') }}">сначала недавние</button>
-                    <button type="button" id="asc" class="btn-filter btn btn-outline-primary {{ empty($_GET['sortmethod']) ? '' : ($_GET['sortmethod'] == 'asc' ? 'active' : '') }}">сначала давние</button>
-                </div> --}}
-
-                {{-- <div class="btn-group pe-3" role="group" aria-label="Basic outlined example">
-                    <a href="" class="btn btn-outline-primary">дате заявки</a>
-                    <a href="" class="btn btn-outline-primary">дате редактирования</a>
-                </div>
-
-                <div class="btn-group ps-3" role="group" aria-label="Basic outlined example">
-                    <a href="" class="btn btn-outline-primary">по убыванию</a>
-                    <a href="" class="btn btn-outline-primary">по возрастанию</a>
-                </div> --}}
             </div>
         </div>
 
@@ -94,20 +88,20 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        {{-- <th scope="col">№</th> --}}
                         <th scope="col">ФИО</th>
                         <th scope="col">Email</th>
                         <th scope="col">Телефон</th>
+                        <th scope="col">Адрес</th>
                         <th scope="col">Дата заявки</th>
                         <th scope="col">Дата редактирования</th>
                     </tr>
                 </thead>
                 @forelse ($clients as $client)
                     <tr class="table-row" id="{{ $client->id }}">
-                        {{-- <th scope="row">{{ $client->id }}</th> --}}
                         <td>{{ $client->secondname.' '.$client->firstname.' '.$client->patronymic  }}</td>
                         <td>{{ $client->email }}</td>
                         <td>{{ $client->phone }}</td>
+                        <td>{{ ($client->city_id != NULL ? $client->city->name : '').($client->city_id != NULL ? ', ' : '').$client->address }}</td>
                         <td>{{ $client->created_at->format('d-m-Y h:m:s') }}</td>
                         <td>{{ $client->updated_at->format('d-m-Y h:m:s') }}</td>
                     </tr>

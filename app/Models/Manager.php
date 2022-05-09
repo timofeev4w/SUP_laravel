@@ -19,7 +19,7 @@ class Manager extends Authenticatable
 
     protected $primary_key = 'id';
 
-    protected $fillable = ['name', 'password', 'access'];
+    protected $fillable = ['name', 'password'];
 
     protected $hidden = ['password'];
 

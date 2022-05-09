@@ -18,9 +18,16 @@ class CreateClientsTable extends Migration
             $table->string('secondname');
             $table->string('firstname');
             $table->string('patronymic');
-            $table->string('email')->unique();
-            $table->string('phone')->unique();
+            $table->string('email');
+            $table->string('phone');
+            $table->foreignId('city_id')->nullable();
+            $table->string('address');
             $table->timestamps();
+
+            $table->foreign('city_id')
+                ->references('id')
+                ->on('cities')
+                ->nullOnDelete();
         });
     }
 

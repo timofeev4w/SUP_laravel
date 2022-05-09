@@ -5,17 +5,18 @@
         <div class="row pt-5 pb-5">
             <div class="d-flex justify-content-center">
                 <h1>
-                    Введите контактные данные:
+                    Введите новые данные:
                 </h1>
             </div>
         </div>
 
         <div class="row pt-5 pb-5">
             <div class="d-flex justify-content-center">
-                <form action="/clients" method="POST">
+                <form action="/manager/client/{{ $client->id }}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="secondname" name="secondname" placeholder="Иванов" value="{{ old('secondname') }}">
+                        <input type="text" class="form-control" id="secondname" name="secondname" placeholder="Иванов" value="{{ empty(old('secondname')) ? $client->secondname : old('secondname') }}">
                         <label for="secondname">Фамилия</label>
                         <small class="text-danger">
                             @error('secondname')
@@ -25,7 +26,7 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Иван" value="{{ old('firstname') }}">
+                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Иван" value="{{ empty(old('firstname')) ? $client->firstname : old('firstname') }}">
                         <label for="firstname">Имя</label>
                         <small class="text-danger">
                             @error('firstname')
@@ -35,7 +36,7 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="patronymic" name="patronymic" placeholder="Иванович" value="{{ old('patronymic') }}">
+                        <input type="text" class="form-control" id="patronymic" name="patronymic" placeholder="Иванович" value="{{ empty(old('patronymic')) ? $client->patronymic : old('patronymic') }}">
                         <label for="patronymic">Отчество</label>
                         <small class="text-danger">
                             @error('patronymic')
@@ -45,7 +46,7 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="city" name="city" placeholder="Санкт-Петербург" value="{{ old('city') }}">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Санкт-Петербург" value="{{ empty(old('city')) ? $client->city->name : old('city') }}">
                         <label for="city">Город</label>
                         <small class="text-danger">
                             @error('city')
@@ -55,7 +56,7 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="address" name="address" placeholder="Нижняя Красносельская, 43, кв. 1" value="{{ old('address') }}">
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Нижняя Красносельская, 43, кв. 1" value="{{ empty(old('address')) ? $client->address : old('address') }}">
                         <label for="address">Адрес</label>
                         <small class="text-danger">
                             @error('address')
@@ -65,7 +66,7 @@
                     </div>
                     
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" value="{{ old('email') }}">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" value="{{ empty(old('email')) ? $client->email : old('email') }}">
                         <label for="email">Email</label>
                         <small class="text-danger">
                             @error('email')
@@ -75,7 +76,7 @@
                     </div>
                     
                     <div class="form-floating mb-3">
-                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+79643336437" pattern="^+7[0-9]{10}$" value="{{ old('phone') }}">
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+79643336437" pattern="^+7[0-9]{10}$" value="{{ empty(old('phone')) ? $client->phone : old('phone') }}">
                         <label for="phone">Телефон</label>
                         <small class="text-secondary">Формат: +79643336437</small>
                         <br>
@@ -88,7 +89,7 @@
 
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-success" type="submit">
-                            Подать заявку
+                            Изменить данные
                         </button>
                     </div>
                 </form>

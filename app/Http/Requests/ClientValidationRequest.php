@@ -27,8 +27,12 @@ class ClientValidationRequest extends FormRequest
             'secondname' => 'required|max:55',
             'firstname' => 'required|max:55',
             'patronymic' => 'required|max:55',
-            'email' => 'required|max:100|email|unique:clients',
-            'phone' => 'required|size:12|unique:clients'
+            'city' => 'required|max:55',
+            'address' => 'required|max:255',
+            'email' => 'required|max:100|email',
+            'phone' => 'required|size:12'
+            // 'email' => 'required|max:100|email|unique:clients',
+            // 'phone' => 'required|size:12|unique:clients'
         ];
     }
 }

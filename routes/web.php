@@ -25,6 +25,9 @@ Route::middleware('auth:manager')->prefix('/manager')->group(function(){
     Route::get('', [ManagersController::class, 'index'])->name('manager');
     Route::get('/report', [ManagersController::class, 'getReport'])->name('report');
     Route::get('/client/{id}', [ManagersController::class, 'getClient']);
+    Route::get('/client/{id}/edit', [ManagersController::class, 'edit']);
+    Route::put('/client/{id}', [ManagersController::class, 'update']);
+    Route::delete('/client/{id}', [ManagersController::class, 'destroy']);
 });
 Route::prefix('/manager')->group(function(){
     Route::get('/registration', [ManagersController::class, 'registration'])->name('registration');

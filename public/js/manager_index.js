@@ -5,7 +5,7 @@ $.when($.ready).then(function() {
     //         location = '/manager?page=' + current_page + '&sortby=' + $(this).attr('id');
     //     }
     // });
-    $('.btn-check, .date').on('change', function(){
+    $('.btn-check, .date, #city').on('change', function(){
         $('#filter').trigger('submit');
     });
 

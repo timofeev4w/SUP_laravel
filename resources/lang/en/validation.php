@@ -161,6 +161,8 @@ return [
         'secondname' => 'фамилия',
         'firstname' => 'имя',
         'patronymic' => 'отчество',
+        'city' => 'город',
+        'address' => 'адрес',
         'phone' => 'телефон',
         'name' => 'пользователь',
         'password' => 'пароль',
