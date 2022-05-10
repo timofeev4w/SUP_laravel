@@ -95,8 +95,8 @@ class ClientSeeder extends Seeder
             'Ружейный переулок, д.4'
         ];
 
-        for ($i=0; $i < 7; $i++) { 
-            $created_at = date('Y-m-d H:i:s', time() - mt_rand(100, 5000000));
+        for ($i=0; $i < 1731; $i++) { 
+            $created_at = date('Y-m-d H:i:s', time() - mt_rand(100, 60*60*24*30*5));
             $updated_at = date('Y-m-d H:i:s', strtotime($created_at.' + 3 days'));
             DB::table('clients')->insert([
                 'secondname' => $second_names[array_rand($second_names)],

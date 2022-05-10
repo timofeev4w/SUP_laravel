@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 
 class ManagersController extends Controller
 {
+    // Show all clients or with filter
     public function index(Request $request)
     {
         $validated = $request->validate([
@@ -29,10 +30,13 @@ class ManagersController extends Controller
             'date-end' => 'nullable|date_format:Y-m-d',
         ]);
 
-        $clients = Client::getClientsByDate($request->get('sortby'), $request->get('sortmethod'), $request->get('date-start'), $request->get('date-end'), $request->get('city'));
+        $clients = Client::getClientsByDatePaginate($request->get('sortby'), $request->get('sortmethod'), $request->get('date-start'), $request->get('date-end'), $request->get('city'));
+
+        session(['manager_filter_url' => url()->full()]);
 
         $cities = City::all('name');
 
+        // For min & max date input from user
         $date_start = strtotime(Client::min('created_at'));
         $date_start = date('Y-m-d', $date_start);
 
@@ -47,6 +51,7 @@ class ManagersController extends Controller
         ]);
     }
 
+    // Show client by id
     public function getClient(int $id)
     {
         $client = Client::where('id', $id)
@@ -62,8 +67,6 @@ class ManagersController extends Controller
     {
         $client = Client::where('id', $id)
             ->first();
-
-            // dd($client);
 
         return view('manager.client_edit', [
             'client' => $client
@@ -93,41 +96,16 @@ class ManagersController extends Controller
         return redirect('/manager/client/'.$id);
     }
 
+    // Delete client by id
     public function destroy(int $id)
     {
         $client = Client::find($id);
         $client->delete();
 
-        return redirect(route('manager'));
+        return redirect(session('manager_filter_url'));
     }
-
-    public function registration()
-    {
-        if (Auth::guard('manager')->check()) {
-            return redirect(route('manager'));
-        }
-
-        return view('manager.registration');
-    }
-
-    public function registrationStore(ManagerValidationRequest $request)
-    {
-        $validated = $request->validated();
-
-        $request->validate([
-            'name' => 'unique:managers'
-        ]);
-
-        $manager = Manager::create($validated);
-
-        if($manager) {
-            auth()->guard('manager')->login($manager);
-
-            return redirect(route('manager'));
-        }
-    }
-
-
+    
+    // Show login page for managers
     public function login()
     {
         if (Auth::guard('manager')->check()) {
@@ -137,6 +115,7 @@ class ManagersController extends Controller
         return view('manager.login');
     }
 
+    // Login managers
     public function loginPost(ManagerValidationRequest $request)
     {
         $validated = $request->validated();
@@ -144,7 +123,7 @@ class ManagersController extends Controller
         if (Auth::guard('manager')->attempt($validated)) {
             $request->session()->regenerate();
  
-            return redirect()->intended(route('manager'));
+            return redirect()->route('manager');
         }
 
         return back()->withErrors([
@@ -152,6 +131,7 @@ class ManagersController extends Controller
         ])->onlyInput('name');
     }
 
+    // Logout managers
     public function logout(Request $request)
     {
         Auth::logout();
@@ -163,8 +143,47 @@ class ManagersController extends Controller
         return redirect('/');
     }
 
-    public function getReport()
+    // Show report page with date filter
+    public function getReport(Request $request)
     {
-        return view('manager.report');
+        $validated = $request->validate([
+            'date-start' => 'required|date_format:Y-m-d',
+            'date-end' => 'required|date_format:Y-m-d',
+        ]);
+
+        $date_start = $request->get('date-start');
+        $date_end = $request->get('date-end');
+
+        $clients = Client::getClientsByDate($date_start, $date_end);
+
+        $days = [];
+
+        $i = 0;
+        while ($date_start <= $date_end) {
+            $days[$i]['date'] = date('d-m-Y', strtotime($date_start));
+            $days[$i]['count'] = 0;
+            foreach ($clients as $client) {
+                if ($client->created_at->format('Y-m-d') == $date_start) {
+                    $days[$i]['count']++;
+                }
+            }
+
+            $date_start = strtotime($date_start);
+            $date_start = date('Y-m-d', $date_start + 60*60*24);
+            $i++;
+        }
+
+        // For min & max date input from user
+        $date_start = strtotime(Client::min('created_at'));
+        $date_start = date('Y-m-d', $date_start);
+
+        $date_end = strtotime(Client::max('updated_at'));
+        $date_end = date('Y-m-d', $date_end);
+
+        return view('manager.report', [
+            'date_start' => $date_start,
+            'date_end' => $date_end,
+            'days' => $days
+        ]);
     }
 }

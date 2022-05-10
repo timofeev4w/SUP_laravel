@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="row pt-5 pb-5">
+        <div class="row pb-5">
             <div class="d-flex justify-content-center">
                 <form action="/clients" method="POST">
                     @csrf
@@ -75,7 +75,7 @@
                     </div>
                     
                     <div class="form-floating mb-3">
-                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+79643336437" pattern="^+7[0-9]{10}$" value="{{ old('phone') }}">
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="+79643336437" value="{{ old('phone') }}">
                         <label for="phone">Телефон</label>
                         <small class="text-secondary">Формат: +79643336437</small>
                         <br>

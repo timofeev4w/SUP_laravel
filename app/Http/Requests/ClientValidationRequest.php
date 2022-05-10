@@ -30,9 +30,8 @@ class ClientValidationRequest extends FormRequest
             'city' => 'required|max:55',
             'address' => 'required|max:255',
             'email' => 'required|max:100|email',
-            'phone' => 'required|size:12'
-            // 'email' => 'required|max:100|email|unique:clients',
-            // 'phone' => 'required|size:12|unique:clients'
+            'phone' => 'required',
+            'phone' => 'regex:/^\+7[0-9]{10}$/i'
         ];
     }
 }

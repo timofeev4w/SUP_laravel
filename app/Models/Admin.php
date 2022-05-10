@@ -9,18 +9,19 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 
-
-class Manager extends Authenticatable
+class Admin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'managers';
+    protected $table = 'admins';
 
     protected $primary_key = 'id';
 
     protected $fillable = ['name', 'password'];
 
     protected $hidden = ['password'];
+
+    public $timestamps = false;
 
     public function setPasswordAttribute($password)
     {

@@ -41,9 +41,6 @@
                     </div>
                 </form>
             </div>
-            <div class="d-flex justify-content-center pt-3">
-                <a href="{{ route('registration') }}">Нет аккаунта?</a>
-            </div>
         </div>
     </div>
 

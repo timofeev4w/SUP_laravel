@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientsController;
 use App\Models\User;
@@ -17,9 +18,20 @@ use App\Http\Controllers\UsersController;
 |
 */
 
-Route::view('/', 'index');
+Route::view('/', 'index')->name('home');
 
-Route::resource('/clients', ClientsController::class);
+Route::get('/clients/create', [ClientsController::class, 'create']);
+Route::post('/clients', [ClientsController::class, 'store']);
+
+Route::get('/admin/login', [AdminsController::class, 'login'])->name('admin_login');
+Route::post('/admin/login', [AdminsController::class, 'loginPost']);
+
+Route::middleware('auth:admin')->prefix('/admin')->group(function() {
+    Route::get('', [AdminsController::class, 'index'])->name('admin');
+    Route::get('/manager_registration', [AdminsController::class, 'managerCreate'])->name('manager_registration');
+    Route::post('/manager_registration', [AdminsController::class, 'managerStore']);
+    Route::get('/logout', [AdminsController::class, 'logout'])->name('admin_logout');
+});
 
 Route::middleware('auth:manager')->prefix('/manager')->group(function(){
     Route::get('', [ManagersController::class, 'index'])->name('manager');
@@ -28,17 +40,9 @@ Route::middleware('auth:manager')->prefix('/manager')->group(function(){
     Route::get('/client/{id}/edit', [ManagersController::class, 'edit']);
     Route::put('/client/{id}', [ManagersController::class, 'update']);
     Route::delete('/client/{id}', [ManagersController::class, 'destroy']);
-});
-Route::prefix('/manager')->group(function(){
-    Route::get('/registration', [ManagersController::class, 'registration'])->name('registration');
-    Route::post('/registration', [ManagersController::class, 'registrationStore']);
-
-    Route::get('/login', [ManagersController::class, 'login'])->name('login');
-    Route::post('/login', [ManagersController::class, 'loginPost']);
-
     Route::get('/logout', [ManagersController::class, 'logout'])->name('logout');
 });
-
-
-// Route::get('/manager/user', [UsersController::class, 'registration']);
-// Route::post('/manager/user', [UsersController::class, 'registrationStore']);
+Route::prefix('/manager')->group(function(){
+    Route::get('/login', [ManagersController::class, 'login'])->name('login');
+    Route::post('/login', [ManagersController::class, 'loginPost']);
+});
