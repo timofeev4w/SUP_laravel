@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class Client extends Model
 {
@@ -61,12 +62,14 @@ class Client extends Model
             $date_start = $date_start.' 00:00:00';
             $date_end = $date_end.' 23:59:59';
             $sortby = 'created_at';
-            $sortmethod = 'asc';
             
-            return Client::orderBy($sortby, $sortmethod)
+            return DB::table('clients')
+                ->select(DB::raw('DATE(created_at) AS date, COUNT(created_at) AS count'))
                 ->where($sortby, '>=', $date_start)
                 ->where($sortby, '<=', $date_end)
-                ->get();
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();   
         }
     }
 }

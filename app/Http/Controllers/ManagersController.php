@@ -163,8 +163,8 @@ class ManagersController extends Controller
             $days[$i]['date'] = date('d-m-Y', strtotime($date_start));
             $days[$i]['count'] = 0;
             foreach ($clients as $client) {
-                if ($client->created_at->format('Y-m-d') == $date_start) {
-                    $days[$i]['count']++;
+                if ($client->date == $date_start) {
+                    $days[$i]['count'] = $client->count;
                 }
             }
 
